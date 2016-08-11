@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
+import java.util.Random;
 
 import com.ethan.space.input.ControllerState;
 
@@ -17,20 +18,30 @@ import com.ethan.space.input.ControllerState;
  */
 public class Enemy extends SolidObject{
 
-	private final double BASE_SPEED = 0.4;
+	private static final Random rnjesus = new Random();
+	
+	private final double BASE_SPEED = 0.2;
 	private final double BASE_HEALTH = 100;
 	private final double BASE_DAMAGE = 50;
 	private final double BASE_ARMOR = 0; // % damage reduction
 
-	private double dx=-1, dy=0;
+	private double dx=-1, dy=0, drunk_driving_constant;
 	private double health;
 	private double damage;
 	private double armor_pen = 0;
+	private double time_alive = 0;
+	private final double timer_offset;
 	private long score = 100;
 	
-	double radius = 10;
-	private GeneralPath ship_model;
+	double radius = 15;
+	private static final GeneralPath SHIP_MODEL = new GeneralPath( GeneralPath.WIND_EVEN_ODD, 4 );
+	private static boolean init_model = false;
 
+	public Enemy(double tx, double ty, double dd){
+		this(tx, ty);
+		drunk_driving_constant = dd;
+	}
+	
 	public Enemy(double tx, double ty){
 		super(tx, ty);
 		
@@ -38,15 +49,23 @@ public class Enemy extends SolidObject{
 		health = BASE_HEALTH;
 		damage = BASE_DAMAGE;
 		
-		// Construct the ship
-		int dx[] = { 10, 5, -30, 5 };
-		int dy[] = { 0, -10, 0, 10 };
+		timer_offset = rnjesus.nextDouble()*3;
 		
-		ship_model = new GeneralPath( GeneralPath.WIND_EVEN_ODD, dx.length );
-		ship_model.moveTo(dx[0], dy[0]);
-		for( int i=1 ; i<dx.length ; i++ )
-			ship_model.lineTo(dx[i], dy[i]);
-		ship_model.closePath();
+		// Construct the ship
+		int dx[] = { 15, 8, -45, 8 };
+		int dy[] = { 0, -15, 0, 15 };
+		
+		if( !init_model ){
+			synchronized( SHIP_MODEL ){
+				if( !init_model ){
+					init_model = true;
+					SHIP_MODEL.moveTo(dx[0], dy[0]);
+					for( int i=1 ; i<dx.length ; i++ )
+						SHIP_MODEL.lineTo(dx[i], dy[i]);
+					SHIP_MODEL.closePath();
+				}
+			}
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -56,8 +75,10 @@ public class Enemy extends SolidObject{
 	public void tick( double delta_time, ControllerState controller ) {
 		double sx = getX(), sy = getY();
 		sx += delta_time*BASE_SPEED*dx;
-		sy += delta_time*BASE_SPEED*dy;
+		sy += delta_time*BASE_SPEED*0.5*Math.cos(timer_offset+time_alive*2);
 		setLocation( sx, sy );
+		
+		time_alive += delta_time;
 	}
 
 	/* (non-Javadoc)
@@ -69,7 +90,7 @@ public class Enemy extends SolidObject{
 		
 		g2d.setColor(new Color(79, 75, 73));
 		g2d.translate(px, py);
-		g2d.fill(ship_model);
+		g2d.fill(SHIP_MODEL);
 		g2d.translate(-px, -py);
 	}
 

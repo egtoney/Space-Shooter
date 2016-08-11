@@ -47,6 +47,8 @@ public class GameSystems {
 		graphics_engine.stop();
 		input_engine.stop();
 		
+		current_game_settings.save();
+		
 		out.endTimedPrintln("Finished Stopping Game");
 		System.exit(0);
 	}

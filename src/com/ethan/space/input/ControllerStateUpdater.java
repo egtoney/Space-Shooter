@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.HashMap;
+import java.util.Set;
 
 import org.json.simple.JSONObject;
 
@@ -107,7 +108,7 @@ public class ControllerStateUpdater implements KeyListener, MouseListener, Mouse
 	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
-		int key_code = e.getKeyCode();
+		String key_code = ""+e.getKeyCode();
 		controller_state.put((String) key_mapping.get(key_code), 1.0);
 	}
 
@@ -116,7 +117,7 @@ public class ControllerStateUpdater implements KeyListener, MouseListener, Mouse
 	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
-		int key_code = e.getKeyCode();
+		String key_code = ""+e.getKeyCode();
 		controller_state.put((String) key_mapping.get(key_code), 0.0);
 	}
 

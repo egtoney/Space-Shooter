@@ -18,6 +18,7 @@ import org.json.simple.JSONObject;
 
 import com.ethan.space.GameSystems;
 import com.ethan.space.graphics.menus.MainMenu;
+import com.ethan.space.util.Caster;
 import com.ethan.space.util.GameSettings;
 
 /**
@@ -40,7 +41,7 @@ public class GameFrame extends JFrame{
 		setBackground(new Color(0,0,0));
 		setResizable(false);
 		setNativeLookAndFeel();
-		setSize(new Dimension((int) resolution.get("width"), (int) resolution.get("height")));
+		setSize(new Dimension( Caster.castToInteger(resolution.get("width")), Caster.castToInteger(resolution.get("height"))));
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setIgnoreRepaint(true);

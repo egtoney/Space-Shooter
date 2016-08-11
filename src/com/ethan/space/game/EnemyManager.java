@@ -17,9 +17,47 @@ import com.ethan.space.input.ControllerState;
  */
 public class EnemyManager {
 	
+	/*
+	 * - - - - -
+	 * 
+	 * - - - - -
+	 */
+	private final int SPAWN_PATTERN_1 = 0;
+	private final double SPAWN_PATTERN_1_SPAWN_DELAY = 4;
+	
+	/*
+	 *   -
+	 * -
+	 * 
+	 * -
+	 *   -
+	 */
+	private final int SPAWN_PATTERN_2 = 1;
+	private final double SPAWN_PATTERN_2_SPAWN_DELAY = 4;
+	
+	/*
+	 *     - -
+	 *    - -
+	 *   - -
+	 *  - -
+	 * - -
+	 */
+	private final int SPAWN_PATTERN_3 = 2;
+	private final double SPAWN_PATTERN_3_SPAWN_DELAY = 6;
+	
+	/*
+	 * -   -
+	 *   -
+	 *     -
+	 *       -
+	 *   -    
+	 */
+	private final int SPAWN_PATTERN_4 = 3;
+	private final double SPAWN_PATTERN_4_SPAWN_DEALY = 5;
+	
 	private final Random rnjesus = new Random();
 	
-	private final double ENEMY_SPAWN_TIMER = 1; // enemies/second
+	private final double ENEMY_SPAWN_TIMER = 0.1; // enemies/second
 	
 	private double current_spawn_timer = 2;
 
@@ -66,8 +104,44 @@ public class EnemyManager {
 	private List<Enemy> spawnEnemies(double delta_time){
 		List<Enemy> new_enemies = new LinkedList<>();
 		
-		double dy = rnjesus.nextDouble()-0.1+0.05;
-		new_enemies.add(new Enemy(1.1, dy));
+		int enemy_wave_code = rnjesus.nextInt(4);
+		switch( enemy_wave_code ){
+		case( SPAWN_PATTERN_1 ):
+			for( double x=1.1 ; x<1.5 ; x+=0.1 ){
+				new_enemies.add(new Enemy(x, 0.25, 0.1));
+				new_enemies.add(new Enemy(x, 0.75, 0.1));
+			}
+			current_spawn_timer = SPAWN_PATTERN_1_SPAWN_DELAY;
+			break;
+			
+		case( SPAWN_PATTERN_2 ):
+			for( double x=1.1, y=0.40 ; x<1.5 ; x+=0.1, y-=0.05 ){
+				new_enemies.add(new Enemy(x, y));
+				new_enemies.add(new Enemy(x, 1.0-y));
+			}
+			current_spawn_timer = SPAWN_PATTERN_2_SPAWN_DELAY;
+			break;
+			
+		case( SPAWN_PATTERN_3 ):
+			for( double x=1.1, y=0.95 ; y>0 ; x+=0.08, y-=0.2 ){
+				new_enemies.add(new Enemy(x, y));
+				new_enemies.add(new Enemy(x+0.2, y));
+			}
+			current_spawn_timer = SPAWN_PATTERN_3_SPAWN_DELAY;
+			break;
+			
+		case( SPAWN_PATTERN_4 ):
+			new_enemies.add(new Enemy(1.1, 0.1));
+			new_enemies.add(new Enemy(1.3, 0.1));
+			new_enemies.add(new Enemy(1.2, 0.3));
+			new_enemies.add(new Enemy(1.3, 0.5));
+			new_enemies.add(new Enemy(1.4, 0.7));
+			new_enemies.add(new Enemy(1.2, 0.9));
+			current_spawn_timer = SPAWN_PATTERN_4_SPAWN_DEALY;
+			break;
+		}
+		
+//		double dy = rnjesus.nextDouble()-0.1+0.05;
 		
 		return new_enemies;
 	}

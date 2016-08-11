@@ -35,7 +35,7 @@ public class Player extends SolidObject{
 	private double health;
 	private JSONObject player_settings;
 	
-	double radius = 10;
+	double radius = 15;
 	private GeneralPath ship_model;
 	
 	private final double WEAPON_RECHARGE_RATE; // rounds/second
@@ -63,8 +63,8 @@ public class Player extends SolidObject{
 		WEAPON_RECHARGE_RATE = BASE_WEAPON_RECHARGE_RATE * WEAPON_RECHARGE_MODIFIER;
 		
 		// Construct player model
-		int dx[] = { -20, -30, 20, -30 };
-		int dy[] = { 0, 10, 0, -10 };
+		int dx[] = { -30, -45, 30, -45 };
+		int dy[] = { 0, 15, 0, -15 };
 		
 		ship_model = new GeneralPath( GeneralPath.WIND_EVEN_ODD, dx.length );
 		ship_model.moveTo(dx[0], dy[0]);
@@ -87,7 +87,7 @@ public class Player extends SolidObject{
 	@Override
 	public void tick( double delta_time, ControllerState controller ) {
 		// temp constants
-		double speed = 0.5; // units / sec
+		double speed = 0.3; // units / sec
 		
 		double px = getX(), py = getY();
 		
